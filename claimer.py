@@ -175,7 +175,7 @@ class Claim(Help):
             if balance > 0:
                 try:
                     logger.info(f'{self.address} - отправляю токены на {to}...')
-                    tx = contract.functions.transfer(Web3.to_checksum_address(to), balance).build_transaction({
+                    tx = await contract.functions.transfer(Web3.to_checksum_address(to), balance).build_transaction({
                         'from': self.address,
                     'nonce': await self.w3.eth.get_transaction_count(self.address),
                     'maxFeePerGas': int(await self.w3.eth.gas_price),
