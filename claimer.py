@@ -131,6 +131,7 @@ class Claim(Help):
         try:
             proof = data['proof']
             amount = int(data['amount'])
+
             tx = await claim_.functions.claim(self.address, amount, proof).build_transaction({
                 'from': self.address,
                 'nonce': await self.w3.eth.get_transaction_count(self.address),
@@ -152,6 +153,10 @@ class Claim(Help):
             if 'insufficient funds' in error or 'insufficient funds for gas' in error or 'gas required exceeds allowance' in error:
                 logger.error(f'{self.address} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
                 await asyncio.sleep(5)
+                return False
+            if 'Airdrop: Invalid Proof' in error:
+                true_address = str(data['address'])
+                logger.error(f'{self.address} - неправильно подставлен приватный ключ для клейма, истинный адресс - {true_address}...')
                 return False
             else:
                 logger.error(f'{self.address} - {e}...')
