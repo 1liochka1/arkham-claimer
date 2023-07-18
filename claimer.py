@@ -154,7 +154,7 @@ class Claim(Help):
                 logger.error(f'{self.address} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
                 await asyncio.sleep(5)
                 return False
-            if 'Airdrop: Invalid Proof' in error:
+            if 'Invalid Proof' in error:
                 true_address = str(data['address'])
                 logger.error(f'{self.address} - неправильно подставлен приватный ключ для клейма, истинный адресс - {true_address}...')
                 return False
